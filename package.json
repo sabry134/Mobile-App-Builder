@@ -1,0 +1,24 @@
+{
+  "name": "mobile-app-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^15.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sabry134/Mobile-App-Builder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sabry134/Mobile-App-Builder/issues"
+  },
+  "homepage": "https://github.com/sabry134/Mobile-App-Builder#readme"
+}
