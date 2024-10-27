@@ -8,7 +8,7 @@
     "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^15.0.0"
+    "electron": "^15.5.7"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/sabry134/Mobile-App-Builder/issues"
   },
-  "homepage": "https://github.com/sabry134/Mobile-App-Builder#readme"
+  "homepage": "https://github.com/sabry134/Mobile-App-Builder#readme",
+  "dependencies": {
+    "ws": "^8.17.1"
+  }
 }
