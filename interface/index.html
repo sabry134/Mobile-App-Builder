@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Mobile Builder</title>
   <link rel="stylesheet" href="styles.css">
@@ -11,6 +12,24 @@
       color: white;
       font-family: Arial, sans-serif;
     }
+
+    #customize-input {
+      width: 95%;
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    #customizeModal button {
+      padding: 10px;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      border: none;
+      margin-top: 10px;
+      width: 100%;
+    }
+
     #left-panel {
       float: left;
       width: 20%;
@@ -18,16 +37,19 @@
       background-color: #333;
       overflow-y: auto;
     }
+
     #middle-panel {
       float: left;
       width: 60%;
       height: 100%;
       position: relative;
     }
+
     #drop-zone {
       height: 100%;
       background-color: #c5bebe;
     }
+
     .draggable {
       margin: 10px;
       padding: 10px;
@@ -36,9 +58,11 @@
       cursor: move;
       color: black;
     }
+
     .dropped-element {
       position: relative;
     }
+
     .customize-button {
       position: absolute;
       top: 5px;
@@ -48,6 +72,7 @@
       padding: 5px 10px;
       cursor: pointer;
     }
+
     #right-panel {
       float: left;
       width: 20%;
@@ -55,10 +80,12 @@
       background-color: #333;
       overflow-y: auto;
     }
+
     #right-panel ul {
       list-style-type: none;
       padding: 0;
     }
+
     #right-panel li {
       padding: 10px;
       cursor: pointer;
@@ -70,14 +97,17 @@
       align-items: center;
       margin-bottom: 5px;
     }
+
     #right-panel li.selected {
       background-color: #555;
     }
+
     .delete-button {
       color: red;
       cursor: pointer;
       font-weight: bold;
     }
+
     #add-page-button {
       margin: 10px;
       padding: 10px;
@@ -85,6 +115,7 @@
       color: white;
       cursor: pointer;
     }
+
     .modal {
       display: none;
       position: fixed;
@@ -94,9 +125,10 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.4);
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
     }
+
     .modal-content {
       background-color: #fefefe;
       margin: 15% auto;
@@ -105,24 +137,28 @@
       width: 80%;
       max-width: 400px;
     }
+
     .close {
       color: #aaa;
       float: right;
       font-size: 28px;
       font-weight: bold;
     }
+
     .close:hover,
     .close:focus {
       color: black;
       text-decoration: none;
       cursor: pointer;
     }
+
     #page-title-input {
       width: 95%;
       padding: 8px;
       margin-top: 10px;
       font-size: 16px;
     }
+
     #save-page-button {
       padding: 10px;
       background-color: #444;
@@ -132,6 +168,7 @@
       margin-top: 10px;
       width: 100%;
     }
+
     .message {
       display: none;
       position: fixed;
@@ -144,8 +181,50 @@
       border-radius: 5px;
       z-index: 2;
     }
+
+    input[type="text"],
+    input[type="color"],
+    input[type="number"],
+    textarea,
+    select {
+      width: calc(100% - 20px);
+      /* Full width with some padding */
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    /* Label styles */
+    label {
+      font-weight: bold;
+    }
+
+    /* Additional styles for textareas */
+    textarea {
+      height: 100px;
+      /* Set a fixed height */
+    }
+
+    /* Media Queries for responsiveness */
+    @media (max-width: 600px) {
+      #left-panel {
+        width: 100%;
+      }
+
+      .modal-content {
+        width: 95%;
+        /* Full width on smaller screens */
+      }
+    }
   </style>
 </head>
+
 <body>
   <div id="left-panel">
     <div class="draggable" draggable="true" data-type="Button">Button</div>
@@ -191,200 +270,287 @@
     </div>
   </div>
 
-  <div id="select-page-message" class="message">Please select a page first!</div>
+  <!-- Customize Modal -->
+  <div id="customizeModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCustomizeModal()">&times;</span>
+      <h2 id="modal-title" style="color: black;">Customize Element</h2>
+      <div id="customize-fields"></div>
+      <button onclick="closeCustomizeModal()">Save</button>
+    </div>
+  </div>
 
+  <div id="select-page-message" class="message">Please select a page first!</div>
   <div id="valid-title-message" class="message">Please enter a valid page title!</div>
 
-<script>
-  const dropZone = document.getElementById('drop-zone');
-  const leftPanel = document.getElementById('left-panel');
-  const addPageButton = document.getElementById('add-page-button');
-  const pageList = document.getElementById('page-list');
-  const modal = document.getElementById("pageModal");
-  const span = document.getElementsByClassName("close")[0];
-  const savePageButton = document.getElementById("save-page-button");
-  const pageTitleInput = document.getElementById("page-title-input");
-  const selectPageMessage = document.getElementById("select-page-message");
-  const validTitleMessage = document.getElementById("valid-title-message");
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const leftPanel = document.getElementById('left-panel');
+    const addPageButton = document.getElementById('add-page-button');
+    const pageList = document.getElementById('page-list');
+    const modal = document.getElementById("pageModal");
+    const customizeModal = document.getElementById("customizeModal");
+    const span = document.getElementsByClassName("close")[0];
+    const savePageButton = document.getElementById("save-page-button");
+    const pageTitleInput = document.getElementById("page-title-input");
+    const selectPageMessage = document.getElementById("select-page-message");
+    const validTitleMessage = document.getElementById("valid-title-message");
 
-  let currentPageId = null;
-  const pages = {};
+    let currentPageId = null;
+    const pages = {};
 
-  dropZone.addEventListener('dragover', dragOver);
-  dropZone.addEventListener('drop', dropToMiddle);
-  leftPanel.addEventListener('dragover', dragOverLeftPanel);
-  leftPanel.addEventListener('drop', dropToLeftPanel);
-  addPageButton.addEventListener('click', openModal);
-  span.addEventListener('click', closeModal);
-  window.addEventListener('click', outsideClick);
-  savePageButton.addEventListener('click', addPage);
+    dropZone.addEventListener('dragover', dragOver);
+    dropZone.addEventListener('drop', dropToMiddle);
+    leftPanel.addEventListener('dragover', dragOverLeftPanel);
+    leftPanel.addEventListener('drop', dropToLeftPanel);
+    addPageButton.addEventListener('click', openModal);
+    span.addEventListener('click', closeModal);
+    window.addEventListener('click', outsideClick);
+    savePageButton.addEventListener('click', addPage);
 
-  function dragOver(event) {
-    event.preventDefault();
-  }
-
-  function dropToMiddle(event) {
-    event.preventDefault();
-    const dataType = event.dataTransfer.getData('text/plain');
-    
-    if (!currentPageId) {
-      showSelectPageMessage();
-      return;
+    function dragOver(event) {
+      event.preventDefault();
     }
 
-    const droppedContainer = document.createElement('div');
-    droppedContainer.classList.add('dropped-element');
-    
-    const droppedElement = document.createElement('div');
-    droppedElement.textContent = dataType;
-    droppedElement.classList.add('draggable');
-    droppedElement.setAttribute('draggable', true);
-    droppedElement.setAttribute('data-type', dataType);
-    
-    droppedContainer.appendChild(droppedElement);
-    
-    const customizeButton = document.createElement('button');
-    customizeButton.textContent = 'Customize';
-    customizeButton.classList.add('customize-button');
-    droppedContainer.appendChild(customizeButton);
-    
-    dropZone.appendChild(droppedContainer);
+    function dropToMiddle(event) {
+      event.preventDefault();
+      const dataType = event.dataTransfer.getData('text/plain');
 
-    if (!pages[currentPageId]) {
-      pages[currentPageId] = [];
+      if (!currentPageId) {
+        showSelectPageMessage();
+        return;
+      }
+
+      const droppedContainer = document.createElement('div');
+      droppedContainer.classList.add('dropped-element');
+
+      const droppedElement = document.createElement('div');
+      droppedElement.textContent = dataType;
+      droppedElement.classList.add('draggable');
+      droppedElement.setAttribute('draggable', true);
+      droppedElement.setAttribute('data-type', dataType);
+
+      droppedContainer.appendChild(droppedElement);
+
+      const customizeButton = document.createElement('button');
+      customizeButton.textContent = 'Customize';
+      customizeButton.classList.add('customize-button');
+
+      // Pass the data type to the openCustomizeModal function
+      customizeButton.addEventListener('click', () => openCustomizeModal(dataType));
+
+      droppedContainer.appendChild(customizeButton);
+      dropZone.appendChild(droppedContainer);
+
+      if (!pages[currentPageId]) {
+        pages[currentPageId] = [];
+      }
+      pages[currentPageId].push(droppedContainer);
+
+      droppedElement.addEventListener('dragstart', dragStart);
+      droppedElement.addEventListener('dragend', dragEnd);
     }
-    pages[currentPageId].push(droppedContainer);
 
-    droppedElement.addEventListener('dragstart', dragStart);
-    droppedElement.addEventListener('dragend', dragEnd);
-  }
+    function dragOverLeftPanel(event) {
+      event.preventDefault();
+    }
 
-  function dragOverLeftPanel(event) {
-    event.preventDefault();
-  }
+    function dropToLeftPanel(event) {
+      event.preventDefault();
+      const dataType = event.dataTransfer.getData('text/plain');
 
-  function dropToLeftPanel(event) {
-    event.preventDefault();
-    const dataType = event.dataTransfer.getData('text/plain');
-    
-    const draggedElement = document.querySelector(`#drop-zone [data-type="${dataType}"]`);
-    if (draggedElement) {
-      const droppedContainer = draggedElement.closest('.dropped-element');
-      if (droppedContainer) {
-        droppedContainer.parentNode.removeChild(droppedContainer);
+      const draggedElement = document.querySelector(`#drop-zone [data-type="${dataType}"]`);
+      if (draggedElement) {
+        const droppedContainer = draggedElement.closest('.dropped-element');
+        if (droppedContainer) {
+          droppedContainer.parentNode.removeChild(droppedContainer);
 
-        if (currentPageId && pages[currentPageId]) {
-          const index = pages[currentPageId].indexOf(droppedContainer);
-          if (index > -1) {
-            pages[currentPageId].splice(index, 1);
+          if (currentPageId && pages[currentPageId]) {
+            const index = pages[currentPageId].indexOf(droppedContainer);
+            if (index > -1) {
+              pages[currentPageId].splice(index, 1);
+            }
           }
         }
       }
     }
-  }
 
-  const draggableElements = document.querySelectorAll('.draggable');
-  draggableElements.forEach(element => {
-    element.addEventListener('dragstart', dragStart);
-    element.addEventListener('dragend', dragEnd);
-  });
+    const draggableElements = document.querySelectorAll('.draggable');
+    draggableElements.forEach(element => {
+      element.addEventListener('dragstart', dragStart);
+      element.addEventListener('dragend', dragEnd);
+    });
 
-  function dragStart(event) {
-    event.dataTransfer.setData('text/plain', event.target.dataset.type);
-  }
+    function dragStart(event) {
+      event.dataTransfer.setData('text/plain', event.target.dataset.type);
+    }
 
-  function dragEnd(event) {
-  }
+    function dragEnd() {
+    }
 
-  function openModal() {
-    modal.style.display = "block";
-    setTimeout(() => {
-      pageTitleInput.focus();
-    }, 0);
-  }
+    function openModal() {
+      modal.style.display = "block";
+    }
 
-  function closeModal() {
-    modal.style.display = "none";
-  }
-
-  function outsideClick(event) {
-    if (event.target == modal) {
+    function closeModal() {
       modal.style.display = "none";
     }
-  }
 
-  function addPage() {
-    const pageName = pageTitleInput.value.trim();
-    if (pageName) {
-      const pageId = 'page-' + Date.now();
-      const listItem = document.createElement('li');
-      listItem.textContent = pageName;
-      listItem.setAttribute('data-page-id', pageId);
-      listItem.addEventListener('click', () => selectPage(pageId));
-
-      const deleteButton = document.createElement('span');
-      deleteButton.textContent = '✖';
-      deleteButton.classList.add('delete-button');
-      deleteButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        deletePage(pageId, listItem);
-      });
-
-      listItem.appendChild(deleteButton);
-
-      pageList.appendChild(listItem);
-      pages[pageId] = [];
-      closeModal();
-    } else {
-      showValidTitleMessage();
-    }
-  }
-
-  function deletePage(pageId, listItem) {
-    delete pages[pageId];
-    listItem.remove();
-    if (currentPageId === pageId) {
-      currentPageId = null;
-      dropZone.innerHTML = '';
-    }
-  }
-
-  function selectPage(pageId) {
-    if (currentPageId) {
-      const currentListItem = document.querySelector(`[data-page-id="${currentPageId}"]`);
-      if (currentListItem) {
-        currentListItem.classList.remove('selected');
+    function outsideClick(event) {
+      if (event.target === modal) {
+        closeModal();
       }
     }
 
-    const listItem = document.querySelector(`[data-page-id="${pageId}"]`);
-    if (listItem) {
-      listItem.classList.add('selected');
-    }
+    function addPage() {
+      const title = pageTitleInput.value.trim();
 
-    currentPageId = pageId;
-    dropZone.innerHTML = '';
-    if (pages[pageId]) {
-      pages[pageId].forEach(element => {
-        dropZone.appendChild(element);
+      if (!title) {
+        showValidTitleMessage();
+        return;
+      }
+
+      const pageId = `page-${Date.now()}`;
+      pages[pageId] = [];
+
+      const li = document.createElement('li');
+      li.textContent = title;
+      li.setAttribute('data-page-id', pageId);
+
+      li.addEventListener('click', () => {
+        document.querySelectorAll('#right-panel li').forEach(li => li.classList.remove('selected'));
+        li.classList.add('selected');
+        currentPageId = pageId;
+        renderPageContent();
       });
+
+      const deleteButton = document.createElement('span');
+      deleteButton.classList.add('delete-button');
+      deleteButton.textContent = 'x';
+      deleteButton.addEventListener('click', () => {
+        delete pages[pageId];
+        pageList.removeChild(li);
+        if (currentPageId === pageId) {
+          currentPageId = null;
+          clearDropZone();
+        }
+      });
+
+      li.appendChild(deleteButton);
+      pageList.appendChild(li);
+
+      closeModal();
+      pageTitleInput.value = '';
     }
-  }
 
-  function showSelectPageMessage() {
-    selectPageMessage.style.display = "block";
-    setTimeout(() => {
-      selectPageMessage.style.display = "none";
-    }, 3000);
-  }
+    function renderPageContent() {
+      clearDropZone();
 
-  function showValidTitleMessage() {
-    validTitleMessage.style.display = "block";
-    setTimeout(() => {
-      validTitleMessage.style.display = "none";
-    }, 3000);
-  }
-</script>
+      if (pages[currentPageId]) {
+        pages[currentPageId].forEach(element => {
+          dropZone.appendChild(element);
+        });
+      }
+    }
 
+    function clearDropZone() {
+      dropZone.innerHTML = '';
+    }
+
+    function showSelectPageMessage() {
+      selectPageMessage.style.display = 'block';
+      setTimeout(() => {
+        selectPageMessage.style.display = 'none';
+      }, 2000);
+    }
+
+    function showValidTitleMessage() {
+      validTitleMessage.style.display = 'block';
+      setTimeout(() => {
+        validTitleMessage.style.display = 'none';
+      }, 2000);
+    }
+
+    let customizationData = {};
+
+    // Load item.json file (ensure it's accessible in the same directory)
+    fetch('item.json')
+      .then(response => response.json())
+      .then(data => {
+        customizationData = data;
+      })
+      .catch(error => console.error('Error loading item.json:', error));
+
+    // Function to open the modal with customization fields
+    function openCustomizeModal(type) {
+      if (!customizationData[type]) {
+        alert('Customization data not found for this type!');
+        console.error('Customization data not found for this type:', type);
+        return;
+      }
+
+      const modal = document.getElementById('customizeModal');
+      const modalTitle = document.getElementById('modal-title');
+      const fieldsContainer = document.getElementById('customize-fields');
+      const config = customizationData[type];
+
+      // Set modal title
+      modalTitle.innerText = config.title;
+
+      // Clear existing fields
+      fieldsContainer.innerHTML = '';
+
+      // Dynamically create input fields based on item.json data
+      config.fields.forEach(field => {
+        const fieldContainer = document.createElement('div');
+        fieldContainer.style.marginBottom = '10px';
+
+        const label = document.createElement('label');
+        label.innerText = field.label;
+        label.style.display = 'block';
+
+        let input;
+        switch (field.type) {
+          case 'text':
+          case 'color':
+          case 'number':
+            input = document.createElement('input');
+            input.type = field.type;
+            input.placeholder = field.placeholder;
+            break;
+          case 'textarea':
+            input = document.createElement('textarea');
+            input.placeholder = field.placeholder;
+            break;
+          case 'checkbox':
+            input = document.createElement('input');
+            input.type = 'checkbox';
+            break;
+          case 'select':
+            input = document.createElement('select');
+            field.options.forEach(option => {
+              const optionElement = document.createElement('option');
+              optionElement.value = option;
+              optionElement.innerText = option;
+              input.appendChild(optionElement);
+            });
+            break;
+        }
+
+        // Add input field to container
+        fieldContainer.appendChild(label);
+        fieldContainer.appendChild(input);
+        fieldsContainer.appendChild(fieldContainer);
+      });
+
+      // Show the modal
+      modal.style.display = 'block';
+    }
+    function closeCustomizeModal() {
+      const modal = document.getElementById('customizeModal');
+      modal.style.display = 'none';
+    }
+  </script>
 </body>
+
 </html>

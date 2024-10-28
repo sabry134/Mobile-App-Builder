@@ -1,0 +1,168 @@
+{
+    "Button": {
+      "title": "Customize Button",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Button Label",
+          "placeholder": "Enter button text"
+        },
+        {
+          "type": "color",
+          "label": "Button Color",
+          "placeholder": "Choose color"
+        },
+        {
+          "type": "text",
+          "label": "Click Action",
+          "placeholder": "Enter action on click"
+        }
+      ]
+    },
+    "Radio Group": {
+      "title": "Customize Radio Group",
+      "fields": [
+        {
+          "type": "textarea",
+          "label": "Options (comma-separated)",
+          "placeholder": "Option1, Option2, Option3"
+        },
+        {
+          "type": "text",
+          "label": "Default Selected Option",
+          "placeholder": "Enter default option"
+        }
+      ]
+    },
+    "Text Field": {
+      "title": "Customize Text Field",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Placeholder Text",
+          "placeholder": "Enter placeholder"
+        },
+        {
+          "type": "checkbox",
+          "label": "Required",
+          "placeholder": ""
+        }
+      ]
+    },
+    "Image": {
+      "title": "Customize Image",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Image URL",
+          "placeholder": "Enter image URL"
+        },
+        {
+          "type": "text",
+          "label": "Alt Text",
+          "placeholder": "Enter alt text"
+        }
+      ]
+    },
+    "Text": {
+      "title": "Customize Text",
+      "fields": [
+        {
+          "type": "textarea",
+          "label": "Content",
+          "placeholder": "Enter text content"
+        },
+        {
+          "type": "select",
+          "label": "Text Alignment",
+          "options": ["Left", "Center", "Right"]
+        }
+      ]
+    },
+    "Picker": {
+      "title": "Customize Picker",
+      "fields": [
+        {
+          "type": "textarea",
+          "label": "Options (comma-separated)",
+          "placeholder": "Option1, Option2, Option3"
+        }
+      ]
+    },
+    "Header 1": {
+      "title": "Customize Header 1",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Header Text",
+          "placeholder": "Enter header text"
+        }
+      ]
+    },
+    "Header 2": {
+      "title": "Customize Header 2",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Header Text",
+          "placeholder": "Enter header text"
+        }
+      ]
+    },
+    "Header 3": {
+      "title": "Customize Header 3",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Header Text",
+          "placeholder": "Enter header text"
+        }
+      ]
+    },
+    "Progress Bar": {
+      "title": "Customize Progress Bar",
+      "fields": [
+        {
+          "type": "number",
+          "label": "Progress Percentage",
+          "placeholder": "Enter percentage (0-100)"
+        }
+      ]
+    },
+    "External Link": {
+      "title": "Customize External Link",
+      "fields": [
+        {
+          "type": "text",
+          "label": "URL",
+          "placeholder": "Enter link URL"
+        },
+        {
+          "type": "text",
+          "label": "Link Text",
+          "placeholder": "Enter display text"
+        }
+      ]
+    },
+    "API Request": {
+      "title": "Customize API Request",
+      "fields": [
+        {
+          "type": "text",
+          "label": "Endpoint URL",
+          "placeholder": "Enter API URL"
+        },
+        {
+          "type": "textarea",
+          "label": "Headers (JSON format)",
+          "placeholder": "{\"Authorization\": \"Bearer...\"}"
+        },
+        {
+          "type": "textarea",
+          "label": "Body (JSON format)",
+          "placeholder": "{\"key\": \"value\"}"
+        }
+      ]
+    }
+  }
+  
